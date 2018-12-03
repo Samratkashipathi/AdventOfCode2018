@@ -18,4 +18,5 @@ fn main() {
     //println!("{:#?}", str_list);
 
     println!("{}", config.find_multiples(&str_list));
+    println!("{:#?}", config.find_nearest_strings(&str_list));
 }

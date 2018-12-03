@@ -1,4 +1,7 @@
+extern crate itertools;
+
 use std::collections::HashMap;
+use itertools::Itertools;
 use std::fs;
 
 pub struct Config {
@@ -26,42 +29,46 @@ impl Config {
             string_list.push(s.trim().to_string());
         }
 
-        string_list
+        return string_list;
     }
 
-    pub fn find_multiples(self, string_list: &Vec<String>) -> i32 {
-        let mut multiple_has_map = HashMap::new();
+    pub fn find_multiples(&self, string_list: &Vec<String>) -> i32 {
+        let mut count_2 = 0;
+        let mut count_3 = 0;
         for s in string_list {
-            let mut already_inserted_2 = false;
-            let mut already_inserted_3 = false;
             let mut temp_hash_map = HashMap::new();
             let char_vec: Vec<char> = s.chars().collect();
             for c in char_vec {
                 let count = temp_hash_map.entry(c).or_insert(0);
                 *count += 1;
             }
-            for (key, value) in temp_hash_map {
-                //println!("{}: {}", key, value);
-                if value == 2 && !already_inserted_2 {
-                    let count = multiple_has_map.entry(value).or_insert(0);
-                    *count += 1;
-                    already_inserted_2 = true
-                }
-                if value == 3 && !already_inserted_3 {
-                    let count = multiple_has_map.entry(value).or_insert(0);
-                    *count += 1;
-                    already_inserted_3 = true
-                }
+
+            if temp_hash_map.values().any(|&c| c == 2) {
+                count_2 += 1;
             }
 
-            //println!("End of loop")
+            if temp_hash_map.values().any(|&c| c == 3) {
+                count_3 += 1;
+            }
         }
-        let mut multiple = 1;
-        for (key, value) in multiple_has_map {
-            multiple *= value
-        }
+        return count_2 * count_3;
+    }
 
-        multiple
+    pub fn find_nearest_strings(&self, string_list: &Vec<String>) -> Option<String> {
+        let mut nearest_strings: Option<String> = None;
+        for (x, y) in string_list.iter().tuple_combinations() {
+            let dis = x.chars().zip(y.chars()).filter(|&(a, b)| a != b).count();
+            if dis <= 1 {
+                nearest_strings = Some(x.chars()
+                    .zip(y.chars())
+                    .filter_map(|(a, b)|
+                        if a == b {
+                            Some(a)
+                        } else { None }).collect());
+                break;
+            }
+        }
+        return nearest_strings;
     }
 }
 
