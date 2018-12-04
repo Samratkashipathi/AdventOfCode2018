@@ -5,11 +5,11 @@ use regex::Regex;
 
 #[derive(Debug)]
 pub struct Rectangle {
-    claim_id: i64,
-    left_edge: i64,
-    top_edge: i64,
-    width: i64,
-    height: i64,
+    pub claim_id: i64,
+    pub left_edge: i64,
+    pub top_edge: i64,
+    pub width: i64,
+    pub height: i64,
 }
 
 pub struct Config {
