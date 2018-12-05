@@ -3,6 +3,7 @@ extern crate regex;
 use std::fs;
 use regex::Regex;
 
+#[derive(PartialEq)]
 #[derive(Debug)]
 pub struct Rectangle {
     pub claim_id: i64,
